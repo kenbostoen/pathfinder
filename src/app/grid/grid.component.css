@@ -1,20 +1,20 @@
 .node {
-    border: 1px solid black;
+  border: 1px solid black;
 }
 
 .wrapper {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 .FINISH {
-    background-color: red;
+  background-color: red;
 }
 .START {
-    background-color: green;
+  background-color: green;
 }
 .VISITED {
-    background-color: blue;
+  background-color: blue;
 }
 .WALL {
-    background-color: darkgray;
+  background-color: #222623;
 }
