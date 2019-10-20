@@ -1,7 +1,14 @@
 <div class="wrapper" [style.width.px]="width * COLUMNS">
-    <tr *ngFor="let row of grid.rows" class="row">
-        <td *ngFor="let node of row.nodes" [class]="'node ' + node.nodeStatus" [style.width.px]="width"
-            [style.height.px]="height" (click)="clickNode(node)">
-        </td>
-    </tr>
+  <tr *ngFor="let row of grid.rows" class="row">
+    <td
+      *ngFor="let node of row.nodes"
+      [class]="'node ' + node.nodeStatus"
+      [style.width.px]="width"
+      [style.height.px]="height"
+      (click)="clickNode(node)"
+      (mousedown)="mouseDown(node, $event)"
+      (mouseenter)="mouseEnter(node, $event)"
+      (mouseleave)="mouseLeave(node, $event)"
+    ></td>
+  </tr>
 </div>

@@ -19,6 +19,7 @@ export class GridComponent {
 
   private startNode: GridNode;
   private finishNode: GridNode;
+  private draggingStatus: NodeStatus;
 
   grid: Grid = new Grid();
   constructor() {
@@ -30,15 +31,61 @@ export class GridComponent {
     gridNode.nodeStatus = NodeStatus.WALL;
     this.setSpecialNodes(gridNode);
   }
+  mouseDown(node: GridNode, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const gridNode = this.grid.findNode(node.coordinates);
+    if (gridNode.nodeStatus === NodeStatus.EMPTY) {
+      gridNode.nodeStatus = NodeStatus.WALL;
+    } else if (gridNode.nodeStatus === NodeStatus.WALL) {
+      gridNode.nodeStatus = NodeStatus.EMPTY;
+    }
+    this.draggingStatus = gridNode.nodeStatus;
+  }
+  mouseEnter(node: GridNode, event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (this.draggingStatus) {
+      const gridNode = this.grid.findNode(node.coordinates);
+      switch (this.draggingStatus) {
+        case NodeStatus.WALL:
+          gridNode.nodeStatus = NodeStatus.WALL;
+          break;
+        case NodeStatus.START:
+          gridNode.nodeStatus = NodeStatus.START;
+          break;
+        case NodeStatus.FINISH:
+          gridNode.nodeStatus = NodeStatus.FINISH;
+          break;
+        case NodeStatus.EMPTY:
+          gridNode.nodeStatus = NodeStatus.EMPTY;
+          break;
+        default:
+          break;
+      }
+    }
+  }
+  mouseLeave(node: GridNode, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.draggingStatus) {
+      const gridNode = this.grid.findNode(node.coordinates);
+      switch (this.draggingStatus) {
+        case NodeStatus.START:
+          gridNode.nodeStatus = NodeStatus.EMPTY;
+          break;
+        case NodeStatus.FINISH:
+          gridNode.nodeStatus = NodeStatus.EMPTY;
+          break;
+        default:
+          break;
+      }
+    }
+  }
 
-  @HostListener("mousedown", ["$event"])
-  onMouseDown(event) {
-    // we make sure only draggables on the document elements are selected
-    console.log(event);
-    // ##### add this code.
-    event.preventDefault(); // choose one
-    // ##### or add this code.
-    return false; // choose one
+  @HostListener("window:mouseup")
+  onMouseup() {
+    this.draggingStatus = null;
   }
 
   private initNodes(rows: number, columns: number) {
@@ -49,6 +96,11 @@ export class GridComponent {
       }
       this.grid.rows.push(row);
     }
+
+    this.grid.findNode(new GridCoordinates(10, 10)).nodeStatus =
+      NodeStatus.START;
+    this.grid.findNode(new GridCoordinates(10, 30)).nodeStatus =
+      NodeStatus.FINISH;
   }
   private setSpecialNodes(gridNode: GridNode) {
     switch (gridNode.nodeStatus) {
