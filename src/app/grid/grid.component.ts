@@ -12,10 +12,10 @@ import { HostListener } from "@angular/core";
   styleUrls: ["./grid.component.css"]
 })
 export class GridComponent {
-  private readonly ROWS = 20;
-  private readonly COLUMNS = 50;
-  private readonly height = 30;
-  private readonly width = 30;
+  readonly ROWS = 20;
+  readonly COLUMNS = 50;
+  readonly height = 30;
+  readonly width = 30;
 
   private startNode: GridNode;
   private finishNode: GridNode;
