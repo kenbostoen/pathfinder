@@ -22,6 +22,7 @@ export class VisualizerComponent {
   private startNode: GridNode;
   private finishNode: GridNode;
   private draggingStatus: NodeStatus;
+  private subscriptions = [];
 
   grid: Grid = new Grid();
 
@@ -29,15 +30,27 @@ export class VisualizerComponent {
     this.initNodes(this.ROWS, this.COLUMNS);
   }
 
-  visualizeAlgorithm() {
-    this.pathfindingService.gridSubject.subscribe((grid: Grid) => {
-      this.grid = grid;
-      console.log("gridUpdate");
-    });
+  resetGrid() {
+    this.grid = new Grid();
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
+    }
+    this.subscriptions = [];
+    this.initNodes(this.ROWS, this.COLUMNS);
+  }
 
-    this.pathfindingService.solutionSubject.subscribe((node: GridNode) => {
-      this.visualizeSolution(node);
-    });
+  visualizeAlgorithm() {
+    this.subscriptions.push(
+      this.pathfindingService.gridSubject.subscribe((grid: Grid) => {
+        this.grid = grid;
+      })
+    );
+
+    this.subscriptions.push(
+      this.pathfindingService.solutionSubject.subscribe((node: GridNode) => {
+        this.visualizeSolution(node);
+      })
+    );
     this.pathfindingService.dijkstra(
       this.grid,
       this.startNode,
@@ -47,8 +60,6 @@ export class VisualizerComponent {
 
   visualizeSolution(node: GridNode) {
     let currentNode = node;
-    console.log("visualizing");
-    console.log(node);
     const loop = setInterval(() => {
       if (!currentNode.previousNode) {
         clearInterval(loop);
