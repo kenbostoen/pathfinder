@@ -29,6 +29,9 @@ export class PathfindingService {
       }
       this.sortNodesByDistance(unvisitedNodes);
       const closestNode: GridNode = unvisitedNodes.shift();
+      if (closestNode.distance === 999999999) {
+        clearInterval(interval);
+      }
       closestNode.nodeStatus = NodeStatus.VISITED;
       this.grid.updateNodes([closestNode]);
       if (closestNode.isSameAs(finishNode)) {
