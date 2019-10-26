@@ -15,7 +15,6 @@ export class PathfindingService {
   grid: Grid;
 
   dijkstra(grid: Grid, startNode: GridNode, finishNode: GridNode) {
-    console.log("start dijkstra");
     if (!grid || !startNode || !finishNode || startNode.isSameAs(finishNode)) {
       console.log("oops");
       return false;
@@ -24,7 +23,6 @@ export class PathfindingService {
     startNode.distance = 0;
     const nodes: GridNode[] = this.flattenNodes(this.grid.nodes);
     const unvisitedNodes: GridNode[] = nodes.slice();
-    console.log(unvisitedNodes);
     const interval = setInterval(() => {
       if (!unvisitedNodes.length) {
         clearInterval(interval);
