@@ -1,0 +1,23 @@
+.node {
+  border: 1px solid black;
+}
+
+.wrapper {
+  margin: 0 auto;
+}
+
+.FINISH {
+  background-color: red;
+}
+.START {
+  background-color: green;
+}
+.VISITED {
+  background-color: blue;
+}
+.WALL {
+  background-color: #222623;
+}
+.SOLUTION {
+  background-color: yellow;
+}

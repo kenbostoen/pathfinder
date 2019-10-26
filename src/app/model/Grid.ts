@@ -1,14 +1,33 @@
-import { GridRow } from "./GridRow";
 import { GridCoordinates } from "./GridCoordinates";
 import { GridNode } from "./GridNode";
 
 export class Grid {
-  rows: GridRow[] = [];
+  nodes: GridNode[][] = [];
   constructor() {
-    this.rows = [];
+    this.nodes = [];
   }
 
   findNode(coordinates: GridCoordinates): GridNode {
-    return this.rows[coordinates.x].nodes[coordinates.y];
+    return this.nodes[coordinates.x][coordinates.y];
+  }
+
+  updateNodes(nodes: GridNode[]) {
+    for (const node of nodes) {
+      const gridNode = this.findNode(node.coordinates);
+      gridNode.nodeStatus = node.nodeStatus;
+      gridNode.previousNode = node.previousNode;
+      gridNode.distance = node.distance;
+    }
+  }
+
+  getColSize(): number {
+    if (this.nodes.length > 0) {
+      return this.nodes[0].length;
+    }
+    return 0;
+  }
+
+  getRowSize(): number {
+    return this.nodes.length;
   }
 }

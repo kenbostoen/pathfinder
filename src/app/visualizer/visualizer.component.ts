@@ -1,17 +1,17 @@
-import { Component, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { PathfindingService } from "../pathfinding.service";
+import { Grid } from "../model/Grid";
 import { GridNode } from "../model/GridNode";
 import { GridCoordinates } from "../model/GridCoordinates";
-import { Grid } from "../model/Grid";
 import { GridRow } from "../model/GridRow";
 import { NodeStatus } from "../model/NodeStatus";
 import { HostListener } from "@angular/core";
-
 @Component({
-  selector: "app-grid",
-  templateUrl: "./grid.component.html",
-  styleUrls: ["./grid.component.css"]
+  selector: "app-visualizer",
+  templateUrl: "./visualizer.component.html",
+  styleUrls: ["./visualizer.component.css"]
 })
-export class GridComponent {
+export class VisualizerComponent {
   // TODO start and endnode can be overridden
   // TODO one click should act normal
   readonly ROWS = 20;
@@ -23,10 +23,40 @@ export class GridComponent {
   private finishNode: GridNode;
   private draggingStatus: NodeStatus;
 
-  @Input()
   grid: Grid = new Grid();
-  constructor() {
+
+  constructor(private pathfindingService: PathfindingService) {
     this.initNodes(this.ROWS, this.COLUMNS);
+  }
+
+  visualizeAlgorithm() {
+    this.pathfindingService.gridSubject.subscribe((grid: Grid) => {
+      this.grid = grid;
+      console.log("gridUpdate");
+    });
+
+    this.pathfindingService.solutionSubject.subscribe((node: GridNode) => {
+      this.visualizeSolution(node);
+    });
+    this.pathfindingService.dijkstra(
+      this.grid,
+      this.startNode,
+      this.finishNode
+    );
+  }
+
+  visualizeSolution(node: GridNode) {
+    let currentNode = node;
+    console.log("visualizing");
+    console.log(node);
+    const loop = setInterval(() => {
+      if (!currentNode.previousNode) {
+        clearInterval(loop);
+      }
+      this.grid.findNode(currentNode.coordinates).nodeStatus =
+        NodeStatus.SOLUTION;
+      currentNode = currentNode.previousNode;
+    }, 100);
   }
 
   mouseDown(node: GridNode, event) {
@@ -54,9 +84,11 @@ export class GridComponent {
           break;
         case NodeStatus.START:
           gridNode.nodeStatus = NodeStatus.START;
+          this.startNode = gridNode;
           break;
         case NodeStatus.FINISH:
           gridNode.nodeStatus = NodeStatus.FINISH;
+          this.finishNode = gridNode;
           break;
         default:
           break;
@@ -94,11 +126,10 @@ export class GridComponent {
       }
       this.grid.nodes.push(row);
     }
-
-    this.grid.findNode(new GridCoordinates(10, 10)).nodeStatus =
-      NodeStatus.START;
-    this.grid.findNode(new GridCoordinates(10, 30)).nodeStatus =
-      NodeStatus.FINISH;
+    this.startNode = this.grid.findNode(new GridCoordinates(10, 10));
+    this.finishNode = this.grid.findNode(new GridCoordinates(10, 30));
+    this.startNode.nodeStatus = NodeStatus.START;
+    this.finishNode.nodeStatus = NodeStatus.FINISH;
   }
 
   private handleNodeClick(gridNode: GridNode): NodeStatus {

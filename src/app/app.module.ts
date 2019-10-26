@@ -4,10 +4,12 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app/app.component';
 import { GridComponent } from './grid/grid.component';
+import { VisualizerComponent } from './visualizer/visualizer.component';
 @NgModule({
   declarations: [
     AppComponent,
-    GridComponent
+    GridComponent,
+    VisualizerComponent
   ],
   imports: [
     BrowserModule,
