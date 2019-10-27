@@ -31,7 +31,13 @@
         (mousedown)="mouseDown(node, $event)"
         (mouseenter)="mouseEnter(node, $event)"
         (mouseleave)="mouseLeave(node, $event)"
-      ></td>
+      >
+        <!--  <img
+          *ngIf="node.nodeStatus == 'WEIGHTED'"
+          class="weightIcon"
+          src="../../assets/weight.svg"
+        />-->
+      </td>
     </tr>
   </div>
 </div>

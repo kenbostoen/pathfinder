@@ -22,7 +22,9 @@
   background-color: yellow;
 }
 .WEIGHTED {
-  background-color: gray;
+  background-color: lightgray;
+  background-image: url("../../assets/weight.svg");
+  background-size: cover;
 }
 .header {
   text-align: center;
@@ -64,4 +66,8 @@
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+}
+.weightIcon {
+  max-width: 100%;
+  max-height: 100%;
 }
