@@ -4,5 +4,6 @@ export enum NodeStatus {
   EMPTY = "EMPTY",
   FINISH = "FINISH",
   WALL = "WALL",
+  WEIGHTED = "WEIGHTED",
   SOLUTION = "SOLUTION"
 }

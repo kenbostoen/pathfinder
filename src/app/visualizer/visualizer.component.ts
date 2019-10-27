@@ -3,7 +3,6 @@ import { PathfindingService } from "../pathfinding.service";
 import { Grid } from "../model/Grid";
 import { GridNode } from "../model/GridNode";
 import { GridCoordinates } from "../model/GridCoordinates";
-import { GridRow } from "../model/GridRow";
 import { NodeStatus } from "../model/NodeStatus";
 import { HostListener } from "@angular/core";
 @Component({
@@ -12,8 +11,6 @@ import { HostListener } from "@angular/core";
   styleUrls: ["./visualizer.component.css"]
 })
 export class VisualizerComponent {
-  // TODO start and endnode can be overridden
-  // TODO one click should act normal
   readonly ROWS = 20;
   readonly COLUMNS = 50;
   readonly height = 30;
@@ -24,6 +21,7 @@ export class VisualizerComponent {
   private draggingStatus: NodeStatus;
   private subscriptions = [];
 
+  selectedNodeType = "WALL";
   grid: Grid = new Grid();
 
   constructor(private pathfindingService: PathfindingService) {
@@ -74,11 +72,7 @@ export class VisualizerComponent {
     event.preventDefault();
     event.stopPropagation();
     const gridNode = this.grid.findNode(node.coordinates);
-    if (gridNode.nodeStatus === NodeStatus.EMPTY) {
-      gridNode.nodeStatus = NodeStatus.WALL;
-    } else if (gridNode.nodeStatus === NodeStatus.WALL) {
-      gridNode.nodeStatus = NodeStatus.EMPTY;
-    }
+    gridNode.nodeStatus = this.handleNodeClick(gridNode);
     this.draggingStatus = gridNode.nodeStatus;
   }
   mouseEnter(node: GridNode, event) {
@@ -88,6 +82,9 @@ export class VisualizerComponent {
       const gridNode = this.grid.findNode(node.coordinates);
       switch (this.draggingStatus) {
         case NodeStatus.WALL:
+          gridNode.nodeStatus = this.handleNodeClick(gridNode);
+          break;
+        case NodeStatus.WEIGHTED:
           gridNode.nodeStatus = this.handleNodeClick(gridNode);
           break;
         case NodeStatus.EMPTY:
@@ -146,9 +143,19 @@ export class VisualizerComponent {
   private handleNodeClick(gridNode: GridNode): NodeStatus {
     switch (gridNode.nodeStatus) {
       case NodeStatus.WALL:
-        return NodeStatus.EMPTY;
+        if (this.selectedNodeType === "WALL") {
+          return NodeStatus.EMPTY;
+        } else {
+          return NodeStatus.WEIGHTED;
+        }
+      case NodeStatus.WEIGHTED:
+        if (this.selectedNodeType === "WEIGHTED") {
+          return NodeStatus.EMPTY;
+        } else {
+          return NodeStatus.WALL;
+        }
       case NodeStatus.EMPTY:
-        return NodeStatus.WALL;
+        return NodeStatus[this.selectedNodeType];
       case NodeStatus.START:
         return NodeStatus.START;
       case NodeStatus.FINISH:

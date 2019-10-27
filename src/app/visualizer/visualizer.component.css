@@ -21,6 +21,9 @@
 .SOLUTION {
   background-color: yellow;
 }
+.WEIGHTED {
+  background-color: gray;
+}
 .header {
   text-align: center;
 }
@@ -45,4 +48,20 @@
   display: inline-block;
   font-size: 16px;
   margin: 30px;
+}
+.selectedNodeButton {
+  margin: 5px;
+}
+.nodeSelector {
+  border: black 1px solid;
+  width: 200px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+.selected {
+  border: red 3px solid;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }

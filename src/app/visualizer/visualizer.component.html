@@ -4,7 +4,23 @@
     <button class="start-button" (click)="visualizeAlgorithm()">Go</button>
     <button class="reset-button" (click)="resetGrid()">Reset</button>
   </div>
-
+  <div class="nodeSelector">
+    <p>Select node type:</p>
+    <div
+      class="node WALL selectedNodeButton"
+      [class.selected]="selectedNodeType == 'WALL'"
+      [style.width.px]="width"
+      [style.height.px]="height"
+      (click)="selectedNodeType = 'WALL'"
+    ></div>
+    <div
+      class="node WEIGHTED selectedNodeButton"
+      [class.selected]="selectedNodeType == 'WEIGHTED'"
+      [style.width.px]="width"
+      [style.height.px]="height"
+      (click)="selectedNodeType = 'WEIGHTED'"
+    ></div>
+  </div>
   <div class="wrapper" [style.width.px]="width * COLUMNS">
     <tr *ngFor="let row of grid.nodes" class="row">
       <td

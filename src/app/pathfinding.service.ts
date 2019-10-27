@@ -45,7 +45,11 @@ export class PathfindingService {
   updateUnvisitedNeighbors(node: GridNode) {
     const neighbors = this.getUnvisitedNeighbors(node, this.grid);
     for (const neighbor of neighbors) {
-      neighbor.distance = node.distance + 1;
+      if (neighbor.nodeStatus === NodeStatus.WEIGHTED) {
+        neighbor.distance = node.distance + 5;
+      } else {
+        neighbor.distance = node.distance + 1;
+      }
       neighbor.previousNode = node;
     }
     this.grid.updateNodes(neighbors);
