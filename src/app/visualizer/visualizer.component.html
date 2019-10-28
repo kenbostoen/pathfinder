@@ -20,7 +20,21 @@
       [style.height.px]="height"
       (click)="selectedNodeType = 'WEIGHTED'"
     ></div>
+    <p>Select algorithm:</p>
+    <div
+      [class.selected]="selectedAlgorithm == 'ASTAR'"
+      (click)="selectedAlgorithm = 'ASTAR'"
+    >
+      A-Star
+    </div>
+    <div
+      [class.selected]="selectedAlgorithm == 'DIJKSTRA'"
+      (click)="selectedAlgorithm = 'DIJKSTRA'"
+    >
+      Dijkstra
+    </div>
   </div>
+
   <div class="wrapper" [style.width.px]="width * COLUMNS">
     <tr *ngFor="let row of grid.nodes" class="row">
       <td
@@ -31,13 +45,7 @@
         (mousedown)="mouseDown(node, $event)"
         (mouseenter)="mouseEnter(node, $event)"
         (mouseleave)="mouseLeave(node, $event)"
-      >
-        <!--  <img
-          *ngIf="node.nodeStatus == 'WEIGHTED'"
-          class="weightIcon"
-          src="../../assets/weight.svg"
-        />-->
-      </td>
+      ></td>
     </tr>
   </div>
 </div>

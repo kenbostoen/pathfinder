@@ -8,19 +8,20 @@ import { timeout } from "q";
 @Injectable({
   providedIn: "root"
 })
-export class PathfindingService {
+export class AstarService {
   gridSubject = new Subject<Grid>();
   solutionSubject = new Subject<GridNode>();
 
   grid: Grid;
 
-  dijkstra(grid: Grid, startNode: GridNode, finishNode: GridNode) {
+  astar(grid: Grid, startNode: GridNode, finishNode: GridNode) {
     if (!grid || !startNode || !finishNode || startNode.isSameAs(finishNode)) {
       console.log("oops");
       return false;
     }
     this.grid = grid;
     startNode.distance = 0;
+    startNode.travelValue = 0;
     const nodes: GridNode[] = this.flattenNodes(this.grid.nodes);
     const unvisitedNodes: GridNode[] = nodes.slice();
     const interval = setInterval(() => {
@@ -38,17 +39,25 @@ export class PathfindingService {
         clearInterval(interval);
         this.solutionSubject.next(closestNode);
       }
-      this.updateUnvisitedNeighbors(closestNode);
+      this.updateUnvisitedNeighbors(closestNode, finishNode);
       this.gridSubject.next(this.grid);
     }, 10);
   }
-  updateUnvisitedNeighbors(node: GridNode) {
+  updateUnvisitedNeighbors(node: GridNode, finishNode: GridNode) {
     const neighbors = this.getUnvisitedNeighbors(node, this.grid);
     for (const neighbor of neighbors) {
       if (neighbor.nodeStatus === NodeStatus.WEIGHTED) {
-        neighbor.distance = node.distance + 5;
+        neighbor.travelValue = node.travelValue + 5;
+        neighbor.distance =
+          node.travelValue +
+          5 +
+          this.getDistanceFromFinishNode(neighbor, finishNode);
       } else {
-        neighbor.distance = node.distance + 1;
+        neighbor.travelValue = node.travelValue + 1;
+        neighbor.distance =
+          node.travelValue +
+          1 +
+          this.getDistanceFromFinishNode(neighbor, finishNode);
       }
       neighbor.previousNode = node;
     }
@@ -60,6 +69,12 @@ export class PathfindingService {
   }
   flattenNodes(nodes: GridNode[][]): GridNode[] {
     return [].concat(...nodes);
+  }
+
+  getDistanceFromFinishNode(node: GridNode, finishNode: GridNode): number {
+    const xVal = Math.abs(node.coordinates.x - finishNode.coordinates.x);
+    const yVal = Math.abs(node.coordinates.y - finishNode.coordinates.y);
+    return xVal + yVal;
   }
 
   getUnvisitedNeighbors(node: GridNode, grid: Grid): GridNode[] {

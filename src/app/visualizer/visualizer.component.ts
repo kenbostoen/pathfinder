@@ -1,10 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { PathfindingService } from "../pathfinding.service";
+import { DijkstraService } from "../dijkstra.service";
 import { Grid } from "../model/Grid";
 import { GridNode } from "../model/GridNode";
 import { GridCoordinates } from "../model/GridCoordinates";
 import { NodeStatus } from "../model/NodeStatus";
 import { HostListener } from "@angular/core";
+import { AstarService } from "../astar.service";
 @Component({
   selector: "app-visualizer",
   templateUrl: "./visualizer.component.html",
@@ -22,9 +23,13 @@ export class VisualizerComponent {
   private subscriptions = [];
 
   selectedNodeType = "WALL";
+  selectedAlgorithm = "DIJKSTRA";
   grid: Grid = new Grid();
 
-  constructor(private pathfindingService: PathfindingService) {
+  constructor(
+    private dijkstraService: DijkstraService,
+    private astarService: AstarService
+  ) {
     this.initNodes(this.ROWS, this.COLUMNS);
   }
 
@@ -36,24 +41,42 @@ export class VisualizerComponent {
     this.subscriptions = [];
     this.initNodes(this.ROWS, this.COLUMNS);
   }
-
   visualizeAlgorithm() {
+    if (this.selectedAlgorithm === "DIJKSTRA") {
+      this.visualizeDijkstra();
+    }
+    if (this.selectedAlgorithm === "ASTAR") {
+      this.visualizeAstar();
+    }
+  }
+
+  visualizeDijkstra() {
     this.subscriptions.push(
-      this.pathfindingService.gridSubject.subscribe((grid: Grid) => {
+      this.dijkstraService.gridSubject.subscribe((grid: Grid) => {
         this.grid = grid;
       })
     );
 
     this.subscriptions.push(
-      this.pathfindingService.solutionSubject.subscribe((node: GridNode) => {
+      this.dijkstraService.solutionSubject.subscribe((node: GridNode) => {
         this.visualizeSolution(node);
       })
     );
-    this.pathfindingService.dijkstra(
-      this.grid,
-      this.startNode,
-      this.finishNode
+    this.dijkstraService.dijkstra(this.grid, this.startNode, this.finishNode);
+  }
+  visualizeAstar() {
+    this.subscriptions.push(
+      this.astarService.gridSubject.subscribe((grid: Grid) => {
+        this.grid = grid;
+      })
     );
+
+    this.subscriptions.push(
+      this.astarService.solutionSubject.subscribe((node: GridNode) => {
+        this.visualizeSolution(node);
+      })
+    );
+    this.astarService.astar(this.grid, this.startNode, this.finishNode);
   }
 
   visualizeSolution(node: GridNode) {
