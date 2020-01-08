@@ -7,11 +7,11 @@ export class GridNode {
   previousNode: GridNode;
   travelValue: number;
 
-  constructor(coordinates: GridCoordinates) {
+  constructor(coordinates: GridCoordinates, distance: number) {
     this.coordinates = coordinates;
     this.nodeStatus = NodeStatus.EMPTY;
-    this.distance = 999999999;
-    this.travelValue = 999999999;
+    this.distance = distance;
+    this.travelValue = distance;
   }
 
   isSameAs(node: GridNode) {

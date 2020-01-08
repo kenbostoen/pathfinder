@@ -1,0 +1,29 @@
+<ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link" href="#" (click)="start()">Start</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#" (click)="reset()">Reset</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#" (click)="clean()">Clean</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Wall type: {{selectedNodeType}}</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" [class.selected]="selectedNodeType == 'WALL'"
+          (click)="selectNodeType('WALL')">Wall</a>
+          <a class="dropdown-item" [class.selected]="selectedNodeType == 'WEIGHTED'"
+          (click)="selectNodeType('WEIGHTED')">Weighted</a>
+        </div>
+      </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Algorithm: {{selectedAlgorithm}}</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" [class.selected]="selectedAlgorithm == 'DIJKSTRA'"
+        (click)="selectAlgorithm('DIJKSTRA')">Dijkstra</a>
+        <a class="dropdown-item"  [class.selected]="selectedAlgorithm == 'ASTAR'"
+        (click)="selectAlgorithm('ASTAR')">A-Star</a>
+      </div>
+    </li>
+  </ul>

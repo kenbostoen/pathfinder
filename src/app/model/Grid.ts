@@ -3,6 +3,7 @@ import { GridNode } from "./GridNode";
 
 export class Grid {
   nodes: GridNode[][] = [];
+  readonly MAX_DISTANCE = 999999999;
   constructor() {
     this.nodes = [];
   }
@@ -29,5 +30,13 @@ export class Grid {
 
   getRowSize(): number {
     return this.nodes.length;
+  }
+
+  resetDistances() {
+    for (const row of this.nodes) {
+      for (const node of row){
+        node.distance = this.MAX_DISTANCE;
+      }
+    }
   }
 }

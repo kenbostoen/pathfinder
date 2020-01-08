@@ -6,6 +6,7 @@ import { GridCoordinates } from "../model/GridCoordinates";
 import { NodeStatus } from "../model/NodeStatus";
 import { HostListener } from "@angular/core";
 import { AstarService } from "../astar.service";
+import { cloneDeep } from "lodash";
 @Component({
   selector: "app-visualizer",
   templateUrl: "./visualizer.component.html",
@@ -25,6 +26,7 @@ export class VisualizerComponent {
   selectedNodeType = "WALL";
   selectedAlgorithm = "DIJKSTRA";
   grid: Grid = new Grid();
+  gridSetupPreVisualising: Grid;
 
   constructor(
     private dijkstraService: DijkstraService,
@@ -34,6 +36,19 @@ export class VisualizerComponent {
   }
 
   resetGrid() {
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
+    }
+    this.subscriptions = [];
+    console.log(this.gridSetupPreVisualising);
+    this.grid = this.gridSetupPreVisualising;
+    this.startNode = this.grid.findNode(new GridCoordinates(this.startNode.coordinates.x, this.startNode.coordinates.y));
+    this.finishNode = this.grid.findNode(new GridCoordinates(this.finishNode.coordinates.x, this.finishNode.coordinates.y));
+    this.startNode.nodeStatus = NodeStatus.START;
+    this.finishNode.nodeStatus = NodeStatus.FINISH;
+  }
+
+  cleanGrid() {
     this.grid = new Grid();
     for (const sub of this.subscriptions) {
       sub.unsubscribe();
@@ -42,6 +57,7 @@ export class VisualizerComponent {
     this.initNodes(this.ROWS, this.COLUMNS);
   }
   visualizeAlgorithm() {
+    this.gridSetupPreVisualising = cloneDeep(this.grid);
     if (this.selectedAlgorithm === "DIJKSTRA") {
       this.visualizeDijkstra();
     }
@@ -59,6 +75,7 @@ export class VisualizerComponent {
 
     this.subscriptions.push(
       this.dijkstraService.solutionSubject.subscribe((node: GridNode) => {
+
         this.visualizeSolution(node);
       })
     );
@@ -90,6 +107,7 @@ export class VisualizerComponent {
       currentNode = currentNode.previousNode;
     }, 100);
   }
+  
 
   mouseDown(node: GridNode, event) {
     event.preventDefault();
@@ -153,7 +171,7 @@ export class VisualizerComponent {
     for (let x = 0; x < rows; x++) {
       const row: GridNode[] = [];
       for (let y = 0; y < columns; y++) {
-        row.push(new GridNode(new GridCoordinates(x, y)));
+        row.push(new GridNode(new GridCoordinates(x, y), this.grid.MAX_DISTANCE));
       }
       this.grid.nodes.push(row);
     }

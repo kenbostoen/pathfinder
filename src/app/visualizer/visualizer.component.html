@@ -1,38 +1,15 @@
 <div class="wrapper">
+  <app-nav 
+  [selectedNodeType]="selectedNodeType"
+  [selectedAlgorithm]="selectedAlgorithm"
+  (selectedNodeTypeEmitter)="selectedNodeType = $event"
+  (selectedAlgorithmEmitter)="selectedAlgorithm = $event"
+  (resetEmitter)="resetGrid()"
+  (startEmitter)="visualizeAlgorithm()"
+  (cleanEmitter)="cleanGrid()"
+  ></app-nav>
   <div class="header">
     <h1>Pathfinding visualizer by Ken Bostoen</h1>
-    <button class="start-button" (click)="visualizeAlgorithm()">Go</button>
-    <button class="reset-button" (click)="resetGrid()">Reset</button>
-  </div>
-  <div class="nodeSelector">
-    <p>Select node type:</p>
-    <div
-      class="node WALL selectedNodeButton"
-      [class.selected]="selectedNodeType == 'WALL'"
-      [style.width.px]="width"
-      [style.height.px]="height"
-      (click)="selectedNodeType = 'WALL'"
-    ></div>
-    <div
-      class="node WEIGHTED selectedNodeButton"
-      [class.selected]="selectedNodeType == 'WEIGHTED'"
-      [style.width.px]="width"
-      [style.height.px]="height"
-      (click)="selectedNodeType = 'WEIGHTED'"
-    ></div>
-    <p>Select algorithm:</p>
-    <div
-      [class.selected]="selectedAlgorithm == 'ASTAR'"
-      (click)="selectedAlgorithm = 'ASTAR'"
-    >
-      A-Star
-    </div>
-    <div
-      [class.selected]="selectedAlgorithm == 'DIJKSTRA'"
-      (click)="selectedAlgorithm = 'DIJKSTRA'"
-    >
-      Dijkstra
-    </div>
   </div>
 
   <div class="wrapper" [style.width.px]="width * COLUMNS">
