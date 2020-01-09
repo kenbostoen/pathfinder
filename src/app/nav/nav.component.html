@@ -1,12 +1,12 @@
 <ul class="nav nav-pills">
     <li class="nav-item">
-      <a class="nav-link" href="#" (click)="start()" *ngIf="visualizeStatus === 'NOT_RUNNING'">Start</a>
+      <a class="nav-link" href="#" (click)="start()" *ngIf="visualizeStatus === 'READY'">Start</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#" (click)="reset()" *ngIf="visualizeStatus === 'NOT_RUNNING'">Reset</a>
+      <a class="nav-link" href="#" (click)="reset()" *ngIf="visualizeStatus === 'NOT_RUNNING' || visualizeStatus === 'READY'">Clear path</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#" (click)="clean()" *ngIf="visualizeStatus === 'NOT_RUNNING'">Clean</a>
+      <a class="nav-link" href="#" (click)="clean()" *ngIf="visualizeStatus === 'NOT_RUNNING' || visualizeStatus === 'READY'">Remove walls</a>
     </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Wall type: {{selectedNodeType}}</a>

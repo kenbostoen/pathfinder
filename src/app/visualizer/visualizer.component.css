@@ -1,5 +1,6 @@
 .node {
   border: 1px solid black;
+  transition: all .4s ease-in;
 }
 
 .wrapper {
@@ -7,19 +8,24 @@
 }
 
 .FINISH {
-  background-color: red;
+  background-image: url("../../assets/end.png");
+  background-size: cover;
 }
 .START {
-  background-color: green;
+  background-image: url("../../assets/start.png");
+  background-size: cover;
 }
 .VISITED {
-  background-color: blue;
+  background-color: lightgreen;
+  -webkit-transition: background-color 800ms linear;
+  -ms-transition: background-color 800ms linear;
+  transition: background-color 800ms linear;
 }
 .WALL {
-  background-color: #222623;
+  background-color: #34495e;
 }
 .SOLUTION {
-  background-color: yellow;
+  background-color: #8caed1;
 }
 .WEIGHTED {
   background-color: lightgray;

@@ -1,3 +1,17 @@
-.selected {
-    background-color: red;
+
+.nav {
+    background-color: #34495e;
+}
+a {
+    color:white;
+    cursor:pointer;
+}
+.dropdown-item {
+    color: black;
+}
+.dropdown-item:hover {
+    background: #8bbae8;
+}
+.dropdown.show .dropdown-toggle {
+    background-color: #34495e;
 }

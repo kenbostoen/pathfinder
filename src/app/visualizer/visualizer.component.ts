@@ -28,7 +28,7 @@ export class VisualizerComponent {
   selectedAlgorithm = "DIJKSTRA";
   grid: Grid = new Grid();
   gridSetupPreVisualising: Grid;
-  visualizeStatus = VisualizeStatus.NOT_RUNNING;
+  visualizeStatus = VisualizeStatus.READY;
 
   constructor(
     private dijkstraService: DijkstraService,
@@ -38,16 +38,12 @@ export class VisualizerComponent {
   }
 
   resetGrid() {
-    /*for (const sub of this.subscriptions) {
-      sub.unsubscribe();
-    }
-    this.subscriptions = [];*/
-    console.log(this.gridSetupPreVisualising);
     this.grid = this.gridSetupPreVisualising;
     this.startNode = this.grid.findNode(new GridCoordinates(this.startNode.coordinates.x, this.startNode.coordinates.y));
     this.finishNode = this.grid.findNode(new GridCoordinates(this.finishNode.coordinates.x, this.finishNode.coordinates.y));
     this.startNode.nodeStatus = NodeStatus.START;
     this.finishNode.nodeStatus = NodeStatus.FINISH;
+    this.visualizeStatus = VisualizeStatus.READY;
   }
 
   cleanGrid() {
@@ -57,6 +53,7 @@ export class VisualizerComponent {
     }
     this.subscriptions = [];
     this.initNodes(this.ROWS, this.COLUMNS);
+    this.visualizeStatus = VisualizeStatus.READY;
   }
   visualizeAlgorithm() {
     this.visualizeStatus = VisualizeStatus.RUNNING;
@@ -100,18 +97,16 @@ export class VisualizerComponent {
   }
 
   visualizeSolution(node: GridNode) {
-    console.log('visualizing solution');
-
     let currentNode = node;
-    const loop = setInterval(() => {
-      console.log('test');
-      
+    console.log(node);
+    
+    const loop = setInterval(() => {      
       if (!currentNode.previousNode) {
-      console.log('done');
         this.visualizeStatus = VisualizeStatus.NOT_RUNNING;
         clearInterval(loop);
       }
-      this.grid.findNode(currentNode.coordinates).nodeStatus =
+      const checkedNode = this.grid.findNode(currentNode.coordinates); 
+        checkedNode.nodeStatus =
         NodeStatus.SOLUTION;
       currentNode = currentNode.previousNode;
     }, 100);
@@ -121,9 +116,11 @@ export class VisualizerComponent {
   mouseDown(node: GridNode, event) {
     event.preventDefault();
     event.stopPropagation();
-    const gridNode = this.grid.findNode(node.coordinates);
-    gridNode.nodeStatus = this.handleNodeClick(gridNode);
-    this.draggingStatus = gridNode.nodeStatus;
+    if(this.visualizeStatus === VisualizeStatus.READY) {
+      const gridNode = this.grid.findNode(node.coordinates);
+      gridNode.nodeStatus = this.handleNodeClick(gridNode);
+      this.draggingStatus = gridNode.nodeStatus;
+    }
   }
   mouseEnter(node: GridNode, event) {
     event.stopPropagation();

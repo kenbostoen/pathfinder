@@ -15,10 +15,8 @@ export class AstarService {
   grid: Grid;
 
   astar(grid: Grid, startNode: GridNode, finishNode: GridNode) {
-    console.log(startNode);
     
     if (!grid || !startNode || !finishNode || startNode.isSameAs(finishNode)) {
-      console.log("oops");
       return false;
     }
     this.grid = grid;
@@ -26,7 +24,6 @@ export class AstarService {
     startNode.travelValue = 0;
     const nodes: GridNode[] = this.flattenNodes(this.grid.nodes);
     const unvisitedNodes: GridNode[] = nodes.slice();
-    console.log(unvisitedNodes)
     const interval = setInterval(() => {
       if (!unvisitedNodes.length) {
         clearInterval(interval);
@@ -41,15 +38,11 @@ export class AstarService {
       if (closestNode.isSameAs(finishNode)) {
         
         clearInterval(interval);
-        console.log('doneeeee');
         this.solutionSubject.next(closestNode);
-        //this.solutionSubject.complete();
       }
-      console.log(closestNode)
       this.updateUnvisitedNeighbors(closestNode, finishNode);
       this.gridSubject.next(this.grid);
     }, 10);
-    this.gridSubject.complete();
   }
   updateUnvisitedNeighbors(node: GridNode, finishNode: GridNode) {
     const neighbors = this.getUnvisitedNeighbors(node, this.grid);
@@ -87,7 +80,6 @@ export class AstarService {
 
   getUnvisitedNeighbors(node: GridNode, grid: Grid): GridNode[] {
     const neighbors: GridNode[] = [];
-    console.log(node);
     
     const nodeRow: number = node.coordinates.x;
     const nodeCol: number = node.coordinates.y;

@@ -16,7 +16,6 @@ export class DijkstraService {
 
   dijkstra(grid: Grid, startNode: GridNode, finishNode: GridNode) {
     if (!grid || !startNode || !finishNode || startNode.isSameAs(finishNode)) {
-      console.log("oops");
       return false;
     }
     this.grid = grid;
@@ -32,7 +31,7 @@ export class DijkstraService {
       if (closestNode.distance === 999999999) {
         clearInterval(interval);
       }
-      closestNode.nodeStatus = NodeStatus.VISITED;
+        closestNode.nodeStatus = NodeStatus.VISITED;
       this.grid.updateNodes([closestNode]);
       if (closestNode.isSameAs(finishNode)) {
         clearInterval(interval);
