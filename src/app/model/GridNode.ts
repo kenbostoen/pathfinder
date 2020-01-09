@@ -1,10 +1,8 @@
 import { GridCoordinates } from "./GridCoordinates";
 import { NodeStatus } from "./NodeStatus";
-import { NodeFunction } from "./NodeFunction";
 export class GridNode {
   coordinates: GridCoordinates;
   nodeStatus: NodeStatus;
-  nodeFunction: NodeFunction;
   distance: number;
   previousNode: GridNode;
   travelValue: number;
