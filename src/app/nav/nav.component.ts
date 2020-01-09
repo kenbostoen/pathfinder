@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { VisualizeStatus } from '../model/VisualizeStatus';
 
 @Component({
   selector: 'app-nav',
@@ -8,6 +9,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class NavComponent {
   @Input() selectedNodeType: string;
   @Input() selectedAlgorithm: string;
+  @Input() visualizeStatus: VisualizeStatus;
+  
   @Output() selectedNodeTypeEmitter = new EventEmitter();
   @Output() selectedAlgorithmEmitter = new EventEmitter();
   @Output() resetEmitter = new EventEmitter();

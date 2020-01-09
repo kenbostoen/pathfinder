@@ -3,6 +3,7 @@ import { DijkstraService } from "../dijkstra.service";
 import { Grid } from "../model/Grid";
 import { GridNode } from "../model/GridNode";
 import { GridCoordinates } from "../model/GridCoordinates";
+import { VisualizeStatus } from "../model/VisualizeStatus";
 import { NodeStatus } from "../model/NodeStatus";
 import { HostListener } from "@angular/core";
 import { AstarService } from "../astar.service";
@@ -27,6 +28,7 @@ export class VisualizerComponent {
   selectedAlgorithm = "DIJKSTRA";
   grid: Grid = new Grid();
   gridSetupPreVisualising: Grid;
+  visualizeStatus = VisualizeStatus.NOT_RUNNING;
 
   constructor(
     private dijkstraService: DijkstraService,
@@ -36,10 +38,10 @@ export class VisualizerComponent {
   }
 
   resetGrid() {
-    for (const sub of this.subscriptions) {
+    /*for (const sub of this.subscriptions) {
       sub.unsubscribe();
     }
-    this.subscriptions = [];
+    this.subscriptions = [];*/
     console.log(this.gridSetupPreVisualising);
     this.grid = this.gridSetupPreVisualising;
     this.startNode = this.grid.findNode(new GridCoordinates(this.startNode.coordinates.x, this.startNode.coordinates.y));
@@ -57,6 +59,7 @@ export class VisualizerComponent {
     this.initNodes(this.ROWS, this.COLUMNS);
   }
   visualizeAlgorithm() {
+    this.visualizeStatus = VisualizeStatus.RUNNING;
     this.gridSetupPreVisualising = cloneDeep(this.grid);
     if (this.selectedAlgorithm === "DIJKSTRA") {
       this.visualizeDijkstra();
@@ -97,9 +100,15 @@ export class VisualizerComponent {
   }
 
   visualizeSolution(node: GridNode) {
+    console.log('visualizing solution');
+
     let currentNode = node;
     const loop = setInterval(() => {
+      console.log('test');
+      
       if (!currentNode.previousNode) {
+      console.log('done');
+        this.visualizeStatus = VisualizeStatus.NOT_RUNNING;
         clearInterval(loop);
       }
       this.grid.findNode(currentNode.coordinates).nodeStatus =

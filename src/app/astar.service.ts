@@ -39,9 +39,11 @@ export class AstarService {
       closestNode.nodeStatus = NodeStatus.VISITED;
       this.grid.updateNodes([closestNode]);
       if (closestNode.isSameAs(finishNode)) {
+        
         clearInterval(interval);
+        console.log('doneeeee');
         this.solutionSubject.next(closestNode);
-        this.solutionSubject.complete();
+        //this.solutionSubject.complete();
       }
       console.log(closestNode)
       this.updateUnvisitedNeighbors(closestNode, finishNode);
